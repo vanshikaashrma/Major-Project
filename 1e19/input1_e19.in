@@ -1,0 +1,295 @@
+# TEST 1 
+
+# Parameters Changed :: - 
+
+# Total Design is new 
+# ------------------------------------------------------------------------------------------------
+
+
+# 10^-5 
+#
+#
+#
+#
+
+
+go atlas 
+
+mesh THREE.D
+
+x.mesh loc=0.00  spac=0.001
+x.mesh loc=0.0038  spac=0.001
+x.mesh loc=0.004  spac=0.001
+x.mesh loc=0.0058  spac=0.001
+x.mesh loc=0.006  spac=0.001
+x.mesh loc=0.011  spac=0.001
+x.mesh loc=0.0112  spac=0.001
+x.mesh loc=0.013  spac=0.001
+x.mesh loc=0.0132  spac=0.001
+x.mesh loc=0.017 spac=0.001
+
+
+y.mesh loc=0.00 spac=0.001
+y.mesh loc=0.005 spac=0.001
+y.mesh loc=0.008 spac=0.001
+y.mesh loc=0.013 spac=0.001
+y.mesh loc=0.0132 spac=0.001
+y.mesh loc=0.015 spac=0.001
+y.mesh loc=0.017 spac=0.001
+
+
+z.mesh loc = 0.00 spac=0.0005
+z.mesh loc = 0.017 spac=0.0005
+
+#--------------------------------------------------------
+
+region num=1 x.min=0.00 x.max=0.017 y.min=0.00 y.max=0.005 z.min=0.00 z.max=0.017  Silicon name=base
+region num=2 x.min=0.00 x.max=0.017 y.min=0.005 y.max=0.008 z.min=0.00 z.max=0.017  oxide name=layer
+region num=3 x.min=0.006 x.max=0.011 y.min=0.008 y.max=0.013 z.min=0.00 z.max=0.017  Silicon name=channel
+
+
+#------ source / Drain separation -----------
+region num=4 x.min=0.006 x.max=0.011 y.min=0.008 y.max=0.013 z.min=0.00 z.max=0.005  Silicon name=sourceD
+region num=5 x.min=0.006 x.max=0.011 y.min=0.008 y.max=0.013 z.min=0.012 z.max=0.017  Silicon name=DrainD
+
+
+# -------- gate oxide ----------------
+region num=6 x.min=0.0058 x.max=0.006 y.min=0.008 y.max=0.013 z.min=0.006 z.max=0.011  material="hfo2" name=gate_oxide
+region num=6 x.min=0.0058 x.max=0.0112 y.min=0.013 y.max=0.0132 z.min=0.006 z.max=0.011  material="hfo2" name=gate_oxide
+region num=6 x.min=0.011 x.max=0.0112 y.min=0.008 y.max=0.013 z.min=0.006 z.max=0.011  material="hfo2" name=gate_oxide
+
+# ---------- electrode ------------
+
+         #SOURCE
+electrode num=1 name=source x.min = 0.004 x.max = 0.006 y.min=0.008 y.max = 0.013 z.min=0.00 z.max=0.005 material=Aluminium
+electrode num=1 name=source x.min = 0.004 x.max = 0.013 y.min=0.013 y.max = 0.015 z.min =0.00 z.max=0.005  material=Aluminium
+electrode num=1 name=source x.min = 0.011 x.max = 0.013 y.min=0.008 y.max = 0.013 z.min =0.00 z.max=0.005 material=Aluminium
+
+
+         #drain
+electrode num=2 name=drain x.min = 0.004 x.max = 0.006 y.min=0.008 y.max = 0.013 z.min=0.012 z.max=0.017 material=Aluminium
+electrode num=2 name=drain x.min = 0.004 x.max = 0.013 y.min=0.013 y.max = 0.015 z.min =0.012 z.max=0.017  material=Aluminium
+electrode num=2 name=drain x.min = 0.011 x.max = 0.013 y.min=0.008 y.max = 0.013 z.min =0.012 z.max=0.017 material=Aluminium
+
+         #gate
+electrode num=3 x.min=0.0038 x.max=0.0058 y.min=0.008 y.max=0.0132 z.min=0.006 z.max=0.011  material=Aluminium name=gate
+electrode num=3 x.min=0.0038 x.max=0.0132 y.min=0.0132 y.max=0.0152 z.min=0.006 z.max=0.011 material=Aluminium name=gate
+electrode num=3 x.min=0.0112 x.max=0.0132 y.min=0.008 y.max=0.0132 z.min=0.006 z.max=0.011   material=Aluminium name=gate
+
+#--------------------------------------------------
+
+
+#doping 
+doping uniform conc=1e17 p.type region =3
+doping uniform conc=1e19 n.type region=4
+doping uniform conc=1e19 n.type region =5
+
+#-------------------------------------------------
+
+
+#contact 
+
+contact name = source workfun=4
+contact name = drain workfun=4
+contact name = gate workfun=5
+
+# -------------------------------------------
+
+
+
+
+
+struct outfile= SiliconGate.str 
+tonyplot3d SiliconGate.str
+
+
+
+models cvt srh auger  
+#
+mobility bn.cvt=4.75e7 bp.cvt=9.925e6 cn.cvt=1.74e5 cp.cvt=8.842e5 taun.cvt=0.125 taup.cvt=0.0317 gamn.cvt=2.5 gamp.cvt=2.2 mu0n.cvt=52.2 mu0p.cvt=44.9 mu1n.cvt=43.4 mu1p.cvt=29.0 mumaxn.cvt=1417.0 mumaxp.cvt=470.5 crn.cvt=9.68e16 crp.cvt=2.23e17 csn.cvt=3.43e20 csp.cvt=6.10e20 alphn.cvt=0.680 alphp.cvt=0.71 betan.cvt=2.0 betap.cvt=2.0 pcn.cvt=0.0 pcp.cvt=0.23e16 deln.cvt=5.82e14 delp.cvt=2.0546e14
+
+
+
+method BICGST 
+solve init
+solve vsource=0.0
+solve vgate1=0.0 
+
+
+
+#solve vdrain=0.1
+solve vdrain=0.2
+solve vdrain=0.4
+solve vdrain=0.6
+solve vdrain=0.8
+
+log outf=fin_trans_01.log
+#
+log outf= channel_5nm.log
+solve vgate=0.0 vstep=0.1 vfinal=1.0 name=gate
+tonyplot channel_5nm.log
+
+extract name="vt" (xintercept(maxslope(curve(abs(v."gate"),abs(i."drain")))) - abs(ave(v."drain"))/2.0)
+
+# Proceed with saving the structure and other outputs
+log outf=siliconComp4_8.str
+output j.electron j.hole j.conduc j.total ex.field ey.field flowlines e.mobility h.mobility e.temp h.temp con.band val.band qfn j.disp photogen impact 
+save outf=siliconComp4_8.str
+
+struct outfile=siliconComp4_8.str
+tonyplot3d siliconComp4_8.str
+quit
+
+
+
+
+
+# -----------------------------------------------------------------------------
+quit
+# Base Code 
+
+go atlas 
+
+mesh THREE.D
+
+x.mesh loc=0.00  spac=0.001
+x.mesh loc=0.001 spac=0.0005
+x.mesh loc=0.002 spac=0.0004
+x.mesh loc=0.003 spac=0.0004
+x.mesh loc=0.004 spac=0.0004
+x.mesh loc=0.005 spac=0.0005
+x.mesh loc=0.006 spac=0.001
+x.mesh loc=0.009 spac=0.0005
+x.mesh loc=0.010 spac=0.0004
+x.mesh loc=0.011 spac=0.0004
+x.mesh loc=0.012 spac=0.0004
+x.mesh loc=0.013 spac=0.0005
+x.mesh loc=0.014 spac=0.0005
+x.mesh loc=0.015 spac=0.001
+
+
+y.mesh loc=-0.001 spac=0.001
+y.mesh loc=0.00 spac=0.0004
+y.mesh loc=0.002 spac=0.0004
+y.mesh loc=0.003 spac=0.0005
+y.mesh loc=0.007 spac=0.0005
+y.mesh loc=0.008 spac=0.0005
+y.mesh loc=0.010 spac=0.0005
+y.mesh loc=0.015 spac=0.01
+
+
+z.mesh loc = -0.001 spac=0.0005
+z.mesh loc = 0.016 spac=0.0005
+
+#--------------------------------------------------------
+#Channel
+#region num=1 x.min=0.002 x.max=0.013 y.min=0.00 y.max=0.008 Polysilicon z.min=0.005 z.max=0.010
+
+region num=1 x.min=0.005 x.max=0.010 y.min=0.003 y.max=0.008 Silicon name=channel_FULL
+
+# Base 
+region num=2 x.min=0.00 x.max=0.015 y.min=0.010 y.max=0.015 silicon  name=base
+
+# BOX Oxide layer 
+region num =3 x.min = 0.00 x.max = 0.015 y.min=0.008 y.max=0.010 oxide name=Oxidelayer
+
+#OXIDE on GATE 
+region num=4 x.min=0.0045 x.max=0.005 y.min=0.003 y.max=0.008  z.min=0.005 z.max=0.010 material="hfo2" name=GateOxide
+region num=4 x.min=0.0045 x.max=0.0105 y.min=0.0025 y.max=0.003 z.min=0.005 z.max=0.010 material="hfo2" name=GateOxide
+region num=4 x.min=0.010 x.max=0.0105 y.min=0.003 y.max=0.008  z.min=0.005 z.max=0.010 material="hfo2"  name=GateOxide
+
+#region divide
+region num=5 x.min=0.005 x.max=0.010 y.min=0.003 y.max=0.008 z.min =-0.001 z.max=0.005 silicon name=sourceT
+region num=6 x.min=0.005 x.max=0.010 y.min=0.003 y.max=0.008 z.min =0.010 z.max=0.016 silicon name=drainT
+
+#--------------------------------------------------------
+#electrodes naming and marking 
+#electrode definition 
+
+         #SOURCE
+electrode num=1 name=source x.min = 0.0044 x.max = 0.005 y.min=0.0025 y.max = 0.008 z.min = -0.0005 z.max=0.00455 material=Aluminium
+electrode num=1 name=source x.min = 0.0044 x.max = 0.0106 y.min=0.0022 y.max = 0.003 z.min = -0.0005 z.max=0.00455  material=Aluminium
+electrode num=1 name=source x.min = 0.010 x.max = 0.0106 y.min=0.0025 y.max = 0.008 z.min = -0.0005 z.max=0.00455 material=Aluminium
+
+         #GATE
+electrode num=2 name=gate1 x.min=0.0040 x.max=0.0045 y.min=0.0020 y.max=0.008  z.min=0.005 z.max=0.0075 material=Aluminium
+electrode num=2 name=gate1 x.min=0.0040 x.max=0.0105 y.min=0.0020 y.max=0.0025 z.min=0.005 z.max=0.0075 material=Aluminium
+electrode num=2 name=gate1 x.min=0.0105 x.max=0.0110 y.min=0.0020 y.max=0.008  z.min=0.005 z.max=0.0075 material=Aluminium
+
+         #DRAIN
+electrode num=3 name=drain x.min = 0.0044  x.max = 0.005 y.min=0.0025 y.max = 0.008 z.min = 0.0105 z.max=0.0157 material=Aluminium 
+electrode num=3 name=drain x.min = 0.010 x.max = 0.0105 y.min=0.0025 y.max = 0.008 z.min = 0.0105 z.max=0.0157 material=Aluminium 
+electrode num=3 name=drain x.min = 0.0044 x.max = 0.0106 y.min=0.0022 y.max = 0.003 z.min = 0.0105 z.max=0.0157 material=Aluminium 
+
+electrode num=4 name=gate2 x.min=0.0040 x.max=0.0045 y.min=0.0020 y.max=0.008  z.min=0.0075 z.max=0.010 material=Aluminium
+electrode num=4 name=gate2 x.min=0.0040 x.max=0.0105 y.min=0.0020 y.max=0.0025 z.min=0.0075 z.max=0.010 material=Aluminium
+electrode num=4 name=gate2 x.min=0.0105 x.max=0.0110 y.min=0.0020 y.max=0.008  z.min=0.0075 z.max=0.010 material=Aluminium
+
+
+
+#-------------------------------------------------
+
+#doping 
+doping uniform conc=1e17 p.type region =1
+doping uniform conc=1e19 n.type region=5
+doping uniform conc=1e19 n.type region =6
+
+#-------------------------------------------------
+
+
+#contact 
+
+contact name = source workfun=4.2
+contact name = drain workfun=4.2
+contact name = gate1 workfun=5.0
+contact name = gate2 workfun=5.0 common=gate1
+
+
+
+
+
+#--------------------------------------------------
+
+struct outfile= SiliconGate.str 
+tonyplot3d SiliconGate.str
+
+
+
+models cvt srh auger  
+#
+mobility bn.cvt=4.75e7 bp.cvt=9.925e6 cn.cvt=1.74e5 cp.cvt=8.842e5 taun.cvt=0.125 taup.cvt=0.0317 gamn.cvt=2.5 gamp.cvt=2.2 mu0n.cvt=52.2 mu0p.cvt=44.9 mu1n.cvt=43.4 mu1p.cvt=29.0 mumaxn.cvt=1417.0 mumaxp.cvt=470.5 crn.cvt=9.68e16 crp.cvt=2.23e17 csn.cvt=3.43e20 csp.cvt=6.10e20 alphn.cvt=0.680 alphp.cvt=0.71 betan.cvt=2.0 betap.cvt=2.0 pcn.cvt=0.0 pcp.cvt=0.23e16 deln.cvt=5.82e14 delp.cvt=2.0546e14
+
+
+
+method BICGST 
+solve init
+solve vsource=0.0
+solve vgate1=0.0 
+
+
+
+#solve vdrain=0.1
+solve vdrain=0.2
+solve vdrain=0.4
+solve vdrain=0.6
+solve vdrain=0.8
+
+log outf=fin_trans_01.log
+#
+log outf= siliconID_x_VGS4_8.log
+solve vgate1=0.0 vstep=0.1 vfinal=1.0 name=gate1
+tonyplot siliconID_x_VGS4_8.log
+
+extract name="vt" (xintercept(maxslope(curve(abs(v."gate"),abs(i."drain")))) - abs(ave(v."drain"))/2.0)
+
+# Proceed with saving the structure and other outputs
+log outf=siliconComp4_8.str
+output j.electron j.hole j.conduc j.total ex.field ey.field flowlines e.mobility h.mobility e.temp h.temp con.band val.band qfn j.disp photogen impact 
+save outf=siliconComp4_8.str
+
+struct outfile=siliconComp4_8.str
+tonyplot3d siliconComp4_8.str
+
+quit
+
+
